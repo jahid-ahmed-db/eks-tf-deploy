@@ -1,7 +1,7 @@
 # Create the EKS cluster
 
 
-module "dp-sandbox-eks"
+module "dp-sandbox-eks" {
   source                               = "git::https://github.com/terraform-aws-modules/terraform-aws-eks?ref=v12.2.0"
   cluster_name                         = var.eks_cluster_name
   cluster_version                      = "1.17"
@@ -20,6 +20,15 @@ module "dp-sandbox-eks"
       kubelet_extra_args      = "--node-labels=node.kubernetes.io/lifecycle=spot"
       public_ip               = true
     },
+  ]
+
+  // map aws_users to the k8 cluster
+  map_users = [
+    {
+       user_arn = "arn:aws:iam::047625233815:user/jahmed"
+       username = "jahmed"
+       group    = "system:masters"
+    }
   ]
 }
 
